@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Review Movie Project</title>
+    <link rel="stylesheet" href="/styles/style.css" />
+</head>
+<body>
+        <form action="/result" method="post">
+        <h2><%=movie.Title%></h2>
+        <p><%=movie.Type%> <%=movie.Year%></p>
+        <p><%=movie.Plot%></p>
+        <p>Director: <%=movie.Director%></p>
+        <p>Writer: <%=movie.Writer%></p>
+        <p>Actors: <%=movie.Actors%></p>
+        <img class="movie-poster" src="<%=movie.Poster%>" alt="movie's poster"/>
+        <input type="hidden" name="imdbID" value=<%=movie.imdbID%>>
+        <%if(movie.Review){%>
+        <div>
+        <input class="review-box" type="text" name="review" value=<%=movie.Review%>/>
+        <button type="submit" name="id">Edit</button>
+        </div>
+        <%}else{%>
+        <div>
+        <input class="review-box" type="text" name="review" placeholder="Write some review"/>
+        <button type="submit" name="id">Post</button>
+        </div>
+        <%}%>
+        </form>
+</body>
+</html>

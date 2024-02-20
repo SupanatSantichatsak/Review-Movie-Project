@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Review Movie Project</title>
+    <link rel="stylesheet" href="/styles/style.css" />
+</head>
+<body>
+    <h1>Review Movie</h1>
+
+    <form action="/" method="post">
+        <label>Title</label>
+        <input name="title" type="text" placeholder="Title" required/>
+        <label>Type</label>
+        <select name="type">
+            <option></option>
+            <option value="movie">Movie</option>
+            <option value="series">Series</option>
+        </select>
+        <button name="search" type="submit">Search</button>
+    </form>
+
+    <%if(Movies && Movies.length > 0){%>
+        <%Movies.map((movie,index)=>{%>
+            <form action="/review" method="post">
+            <h2><%=movie.Title%></h2>
+            <p><%=movie.Type%> <%=movie.Year%></p>
+            <p><%=movie.Plot%></p>
+            <p>Director: <%=movie.Director%></p>
+            <p>Writer: <%=movie.Writer%></p>
+            <p>Actors: <%=movie.Actors%></p>
+            <img src="<%=movie.Poster%>" alt="movie's poster" width="300px" height="450px">
+            <input type="hidden" name="imdbID" value=<%=movie.imdbID%>>
+            <%if(movie.Review){%>
+            <p>Review: <%=movie.Review%></p>
+            <div>
+                <button type="submit" name="id" value=<%=index%>>Edit</button>
+            </div>
+            <%}else{%>
+            <p>Don't have any review yet.</p>
+            <div>
+                <button type="submit" name="id" value=<%=index%>>Review</button>
+            </div>
+            <%}%>
+            </form>
+        <%})%>
+    <%} else { %>
+            <h2>Error Response</h2>
+            <p><%=Error%></p>
+    <%}%>
+</body>
+</html>
