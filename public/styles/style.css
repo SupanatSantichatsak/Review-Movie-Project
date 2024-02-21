@@ -6,3 +6,60 @@
     width: 300px;
     height: 450px;
 }
+
+/*CSS ของstar*/
+.rate label {
+    cursor:pointer;
+    font-size:30px;
+    color:#ccc;
+}
+
+/*เมื่อกดเลือกinputแล้ว labelอันที่อยู่ล่างทั้งหมดจะเปลี่ยนสี*/
+.rate input:checked ~ label{
+    color: #ffc700;    
+}
+
+/*เมื่อเอาเมาท์ไปวางบนlabel ตัวlabelกับอันที่อยู่ล่างทั้งหมดจะเปลี่ยนสี*/
+.rate label:hover ~ label,
+.rate label:hover {
+    color: #deb217;
+}
+
+/*ซ่อน input*/
+.rate input {
+    position:absolute;
+    top:-9999px;
+}
+
+/*เรียงดาวใหม่ ให้ดาว1อยู่หน้าสุด*/
+.rate {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.rate-warp{
+    display: inline-block;
+}
+
+.score{
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.score-warp{
+    display: inline-block;
+}
+
+.score input:checked ~ label{
+    color: #ffc700;    
+}
+
+.score input {
+    position:absolute;
+    top:-9999px;
+}
+
+.score label {
+    font-size:30px;
+    color:#ccc;
+}

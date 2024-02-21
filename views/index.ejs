@@ -22,7 +22,7 @@
 
     <%if(Movies && Movies.length > 0){%>
         <%Movies.map((movie,index)=>{%>
-            <form action="/review" method="post">
+        <form action="/review" method="post">
             <h2><%=movie.Title%></h2>
             <p><%=movie.Type%> <%=movie.Year%></p>
             <p><%=movie.Plot%></p>
@@ -31,6 +31,22 @@
             <p>Actors: <%=movie.Actors%></p>
             <img src="<%=movie.Poster%>" alt="movie's poster" width="300px" height="450px">
             <input type="hidden" name="imdbID" value=<%=movie.imdbID%>>
+
+            <div class="score-warp">
+                <div class="score">
+                    <input type="radio" id="star5" name="score" value="5" <%=scoreList[index][4]%> disabled/>
+                    <label for="star5">★</label>
+                    <input type="radio" id="star4" name="score" value="4" <%=scoreList[index][3]%> disabled/>
+                    <label for="star4">★</label>
+                    <input type="radio" id="star3" name="score" value="3" <%=scoreList[index][2]%> disabled/>
+                    <label for="star3">★</label>
+                    <input type="radio" id="star2" name="score" value="2" <%=scoreList[index][1]%> disabled/>
+                    <label for="star2">★</label>
+                    <input type="radio" id="star1" name="score" value="1" <%=scoreList[index][0]%> disabled/>
+                    <label for="star1">★</label>
+                </div>
+            </div>
+
             <%if(movie.Review){%>
             <p>Review: <%=movie.Review%></p>
             <div>
@@ -42,7 +58,7 @@
                 <button type="submit" name="id" value=<%=index%>>Review</button>
             </div>
             <%}%>
-            </form>
+        </form>
         <%})%>
     <%} else { %>
             <h2>Error Response</h2>

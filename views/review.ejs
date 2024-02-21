@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="/styles/style.css" />
 </head>
 <body>
-        <form action="/result" method="post">
         <h2><%=movie.Title%></h2>
         <p><%=movie.Type%> <%=movie.Year%></p>
         <p><%=movie.Plot%></p>
@@ -14,18 +13,54 @@
         <p>Writer: <%=movie.Writer%></p>
         <p>Actors: <%=movie.Actors%></p>
         <img class="movie-poster" src="<%=movie.Poster%>" alt="movie's poster"/>
-        <input type="hidden" name="imdbID" value=<%=movie.imdbID%>>
         <%if(movie.Review){%>
+        <form action="/edit" method="post">
         <div>
-        <input class="review-box" type="text" name="review" value=<%=movie.Review%>/>
+        <input type="hidden" name="imdbID" value=<%=movie.imdbID%>>
+        
+        <div class="rate-warp">
+            <div class="rate">
+                <input type="radio" id="star5" name="rate" value="5" <%=scoreList[0][4]%>/>
+                <label for="star5">★</label>
+                <input type="radio" id="star4" name="rate" value="4" <%=scoreList[0][3]%>/>
+                <label for="star4">★</label>
+                <input type="radio" id="star3" name="rate" value="3" <%=scoreList[0][2]%>/>
+                <label for="star3">★</label>
+                <input type="radio" id="star2" name="rate" value="2" <%=scoreList[0][1]%>/>
+                <label for="star2">★</label>
+                <input type="radio" id="star1" name="rate" value="1" <%=scoreList[0][0]%>/>
+                <label for="star1">★</label>
+            </div>
+        </div>
+
+        <input class="review-box" type="text" name="review" value=<%=movie.Review%>>
         <button type="submit" name="id">Edit</button>
         </div>
+        </form>
         <%}else{%>
+        <form action="/result" method="post">
         <div>
+        <input type="hidden" name="imdbID" value=<%=movie.imdbID%>>
+
+        <div class="rate-warp">
+            <div class="rate">
+                <input type="radio" id="star5" name="rate" value="5" />
+                <label for="star5">★</label>
+                <input type="radio" id="star4" name="rate" value="4" />
+                <label for="star4">★</label>
+                <input type="radio" id="star3" name="rate" value="3" />
+                <label for="star3">★</label>
+                <input type="radio" id="star2" name="rate" value="2" />
+                <label for="star2">★</label>
+                <input type="radio" id="star1" name="rate" value="1" />
+                <label for="star1">★</label>
+            </div>
+        </div>
+
         <input class="review-box" type="text" name="review" placeholder="Write some review"/>
         <button type="submit" name="id">Post</button>
         </div>
-        <%}%>
         </form>
+        <%}%>
 </body>
 </html>

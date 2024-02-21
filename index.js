@@ -2,60 +2,14 @@ import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg"
 import axios from "axios";
+import defaultMovieList from "./default-movie-list.js";
 
 const app = express();
 const port = 3000;
 const API_URL = "https://www.omdbapi.com"
 const apikey = "f01dd666"
 
-let defaults = [
-  {
-    Title: "The Shawshank Redemption",
-    Year: "1994",
-    imdbID: "tt0111161",
-    Type: "movie",
-    Poster: "https://m.media-amazon.com/images/M/MV5BNDE3ODcxYzMtY2YzZC00NmNlLWJiNDMtZDViZWM2MzIxZDYwXkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_SX300.jpg",
-    Plot: "Over the course of several years, two convicts form a friendship, seeking consolation and, eventually, redemption through basic compassion.",
-    Director: "Frank Darabont",
-    Writer: "Stephen King, Frank Darabont",
-    Actors: "Tim Robbins, Morgan Freeman, Bob Gunton",
-  },
-  {
-    Title: "The Godfather",
-    Year: "1972",
-    imdbID: "tt0068646",
-    Type: "movie",
-    Poster: "https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg",
-    Plot: "Don Vito Corleone, head of a mafia family, decides to hand over his empire to his youngest son Michael. However, his decision unintentionally puts the lives of his loved ones in grave danger.",
-    Director: "Francis Ford Coppola",
-    Writer: "Mario Puzo, Francis Ford Coppola",
-    Actors: "Marlon Brando, Al Pacino, James Caan",
-  },
-  {
-    Title: "Breaking Bad",
-    Year: "2008–2013",
-    imdbID: "tt0903747",
-    Type: "series",
-    Poster: "https://m.media-amazon.com/images/M/MV5BYmQ4YWMxYjUtNjZmYi00MDQ1LWFjMjMtNjA5ZDdiYjdiODU5XkEyXkFqcGdeQXVyMTMzNDExODE5._V1_SX300.jpg",
-    Plot: "A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student in order to secure his family's future.",
-    Director: "N/A",
-    Writer: "Vince Gilligan",
-    Actors: "Bryan Cranston, Aaron Paul, Anna Gunn",
-  },
-  {
-    Title: "Fight Club",
-    Year: "1999",
-    imdbID: "tt0137523",
-    Type: "movie",
-    Poster: "https://m.media-amazon.com/images/M/MV5BMmEzNTkxYjQtZTc0MC00YTVjLTg5ZTEtZWMwOWVlYzY0NWIwXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg",
-    Plot: "An insomniac office worker and a devil-may-care soap maker form an underground fight club that evolves into much more.",
-    Director: "David Fincher",
-    Writer: "Chuck Palahniuk, Jim Uhls",
-    Actors: "Brad Pitt, Edward Norton, Meat Loaf",
-  }
-];
-
-let movies = defaults;
+let movies = defaultMovieList;
 
 
 const db = new pg.Client({
@@ -75,24 +29,47 @@ app.get("/",async(req,res)=>{
 
   for(let index =0; index<movies.length; index++){
   const id =movies[index].imdbID;
-  try{
+
+    try{
     const result = await db.query("SELECT review FROM reviews WHERE imdbid = $1",[id]);
     const data = result.rows;
     const obj = data[0];
-    if(obj !== undefined){
-      const Review = obj.review;
-      movies[index]['Review'] = Review;
+    const Review = obj.review;
+    movies[index]['Review'] = Review;
       //console.log(Review);
-    }
-
-  }catch(err){
-    console.log(err);
+    }catch(err){/*console.log(err);*/}
+  
+    try{
+    const result = await db.query("SELECT rating FROM reviews WHERE imdbid = $1",[id]);
+    const data = result.rows;
+    const obj = data[0];
+    const Score = obj.rating;
+      if(Score !== null){
+        movies[index]['Score'] = Score;
+      }else{
+      movies[index]['Score'] = 0;
+      }
+      }catch(err){/*console.log(err);*/}
   }
-}
-  //console.log(movies);
-  res.render("index.ejs",{Movies:movies});
-})
 
+  let scoreArray = [];
+  let star = ["","","","",""]
+
+  for(let index =0; index<movies.length; index++){
+    let Score = movies[index].Score;
+    if(Score>0){
+      star[Score-1] = "checked";
+      scoreArray.push(star);
+    }else{
+      scoreArray.push(star);
+    }
+    //console.log(Score);
+    star = ["","","","",""];
+  }
+  console.log(scoreArray);
+  //console.log(movies);
+  res.render("index.ejs",{Movies:movies,scoreList:scoreArray});
+})
 
 app.post("/",async(req,res)=>{
   movies=[];
@@ -127,34 +104,33 @@ app.post("/",async(req,res)=>{
       movies[index]['Director'] = director;
       movies[index]['Writer'] = writer;
       movies[index]['Actors'] = actor;
-      //เพิ่มดึงข้อมูลreviewจากpgAdmin
-      try{
-        const result = await db.query("SELECT review FROM reviews WHERE imdbid = $1",[id]);
-        const data = result.rows;
-        const obj = data[0];
-        if(obj !== undefined){
-          const Review = obj.review;
-          movies[index]['Review'] = Review;
-        }
-    
-      }catch(err){
-        console.log(err);
+
       }
-      }
-      
-      //console.log(movies);
-      res.redirect("/");
     }
-  }catch(err){
-console.log(err);
-  }
+      }catch(err){console.log(err);}
+
+  res.redirect("/");
 })
 
-app.post("/review",(req,res)=>{
+app.post("/review",async(req,res)=>{
   const index = req.body.id;
   const movie = movies[index];
 
-  res.render("review.ejs",{movie:movie});
+
+  let scoreArray = [];
+  let star = ["","","","",""]
+
+  let Score = movie.Score;
+  if(Score >0){
+    star[Score-1] = "checked";
+    scoreArray.push(star);
+  }else{
+    scoreArray.push(star);
+  }
+
+  star = ["","","","",""];
+
+  res.render("review.ejs",{movie:movie,scoreList:scoreArray});
 })
 
 app.post("/result",async (req,res)=>{
@@ -164,15 +140,57 @@ app.post("/result",async (req,res)=>{
   const data = result.data;
   movies=[data];
   const review = req.body.review //เอาค่าreview จาก review.ejs
+  const score = req.body.rate;
+
   if(review && review.length > 0){
+  movies[0]['Review'] = review;
    try{
     await db.query("INSERT INTO reviews (review,imdbid) VALUES ($1,$2)",[review,id]);
-   }catch(err){
-    console.log(err);
-   }}
+   }catch(err){console.log(err);}
+  }
+
+  if(score !== undefined){
+  movies[0]['Score'] = score;
+  try{
+    await db.query("INSERT INTO reviews (rating,imdbid) VALUES ($1,$2)",[score,id]);
+  }catch(err){console.log(err);}
+  }
+
+
+   console.log(score);
    res.redirect("/");
-}
-);
+})
+
+app.post("/edit",async(req,res)=>{
+  const id = req.body.imdbID;
+  const result = await axios.get(`${API_URL}/?apikey=${apikey}&i=${id}&plot=full`);
+  const data = result.data;
+  movies=[data];
+  const review = req.body.review //เอาค่าreview จาก review.ejs
+  const score = req.body.rate;
+  if(review && review.length > 0){
+  movies[0]['Review'] = review;
+   try{
+    await db.query("UPDATE reviews SET review = $1 WHERE imdbid = $2",[review,id]);
+   }catch(err){console.log(err); }
+  }
+
+   if(score !== undefined){
+    movies[0]['Score'] = score;
+    try{
+      await db.query("UPDATE reviews SET rating = $1 WHERE imdbid = $2",[score,id]);
+     }catch(err){console.log(err); }
+    } else {
+      movies[0]['Score'] = 0;
+      try{
+        await db.query("UPDATE reviews SET rating = $1 WHERE imdbid = $2",[score,id]);
+       }catch(err){console.log(err); }
+    }
+
+  console.log(movies);
+   res.redirect("/");
+})
+
 
 
 app.listen(port, () => {
