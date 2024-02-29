@@ -4,32 +4,48 @@
     <meta charset="UTF-8">
     <title>Review Movie Project</title>
     <link rel="stylesheet" href="/styles/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Review Movie</h1>
+    <form action="/home" method="post">
+        <button class="home" name="home" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
+            <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/>
+          </svg></button>
+    </form>
 
+
+    <h1 class="title">Review Movie Project</h1>
+
+    <div class="searchWarp">
+    <div class="search">
     <form action="/" method="post">
         <label>Title</label>
-        <input name="title" type="text" placeholder="Title" required/>
+        <input class="input titleSearch" name="title" type="text" placeholder="Title" required/>
         <label>Type</label>
-        <select name="type">
+        <select class="input typeSearch" name="type">
             <option></option>
             <option value="movie">Movie</option>
             <option value="series">Series</option>
         </select>
-        <button name="search" type="submit">Search</button>
+        <button class="button" name="search" type="submit">Search</button>
     </form>
+    </div>
+    </div>
 
     <%if(Movies && Movies.length > 0){%>
         <%Movies.map((movie,index)=>{%>
         <form action="/review" method="post">
-            <h2><%=movie.Title%></h2>
-            <p><%=movie.Type%> <%=movie.Year%></p>
+            <div class="blog">
+            <img class="img" src="<%=movie.Poster%>" alt="movie's poster" width="300px" height="450px">
+            <div>
+            <h2 class="movieName"><%=movie.Title%></h2>
+            <p class="year"><%=movie.Type%> <%=movie.Year%></p>
             <p><%=movie.Plot%></p>
             <p>Director: <%=movie.Director%></p>
             <p>Writer: <%=movie.Writer%></p>
             <p>Actors: <%=movie.Actors%></p>
-            <img src="<%=movie.Poster%>" alt="movie's poster" width="300px" height="450px">
             <input type="hidden" name="imdbID" value=<%=movie.imdbID%>>
 
             <div class="score-warp">
@@ -50,19 +66,23 @@
             <%if(movie.Review){%>
             <p>Review: <%=movie.Review%></p>
             <div>
-                <button type="submit" name="id" value=<%=index%>>Edit</button>
+                <button class="postButton btn" type="submit" name="id" value=<%=index%>>Edit</button>
             </div>
             <%}else{%>
             <p>Don't have any review yet.</p>
             <div>
-                <button type="submit" name="id" value=<%=index%>>Review</button>
+                <button class="postButton btn" type="submit" name="id" value=<%=index%>>Review</button>
             </div>
             <%}%>
+            </div>
+            </div>
         </form>
         <%})%>
     <%} else { %>
             <h2>Error Response</h2>
             <p><%=Error%></p>
     <%}%>
+
+    <footer>Make by Supanat Santichatsak 2024</footer>
 </body>
 </html>

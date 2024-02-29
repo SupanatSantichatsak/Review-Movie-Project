@@ -1,5 +1,20 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: "Kanit", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: #e8e6e3;
+}
+
 .review-box{
     height: 100px;
+    width: 1000px;
+    background-color:rgba(31, 32, 33, 1) ;
+    border: 1px #e8e6e3 solid ;
+    border-radius: 15px;
+    resize: none;
+    padding: 5px;
 }
 
 .movie-poster{
@@ -35,10 +50,7 @@
 .rate {
     display: flex;
     flex-direction: row-reverse;
-}
-
-.rate-warp{
-    display: inline-block;
+    float: left;
 }
 
 .score{
@@ -63,3 +75,121 @@
     font-size:30px;
     color:#ccc;
 }
+
+/*เริ่มตกแต่งเว็ป*/
+.title{
+    display: flex;
+    justify-content: center;
+    margin-top:40px;
+    margin-bottom: 40px;
+    font-size: 80px;
+}
+
+.search{
+    margin-bottom: 50px;
+    margin-left: 70px;
+}
+.search label{
+    margin-right: 5px;
+    font-size: 30px;
+}
+
+.button{
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: rgba(31, 32, 33, 1);
+}
+
+.input{
+    margin-right: 5px;
+}
+.titleSearch{
+    width: 200px;
+    height: 30px;
+    background-color: rgba(31, 32, 33, 1);
+}
+
+.typeSearch{
+    height: 30px;
+    background-color: rgba(31, 32, 33, 1);
+}
+
+.blog{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 30px;
+    margin-left: 70px;
+}
+
+.img{
+    border-radius: 15px;
+    margin-right: 40px;
+}
+
+.movieName{
+    font-size: 50px;
+}
+
+.year{
+    font-size: 30px;
+}
+
+.postButton{
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 50px;
+    margin-top: 20px;
+    background-color: rgba(31, 32, 33, 1);
+}
+
+.home{
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+footer{
+    display: flex;
+    justify-content: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    color: hsla(0, 0%, 80%, 0.5);
+}
+
+.searchWarp{
+    display: flex;
+    justify-content: center;
+}
+
+body{
+    background-image: url(../images/background.png);
+}
+
+.MovieTitle{
+    font-size: 50px;
+    text-align: center;
+}
+
+.content{
+    display: flex;
+    flex-direction: row;
+    margin-left: 70px;
+}
+
+.text{
+    font-size: 20px;
+}
+
+.reviewPart{
+    display: flex;
+    flex-direction: column;
+}
+
+.btn{
+    width: 60px;
+}
+

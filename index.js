@@ -66,7 +66,7 @@ app.get("/",async(req,res)=>{
     //console.log(Score);
     star = ["","","","",""];
   }
-  console.log(scoreArray);
+  //console.log(scoreArray);
   //console.log(movies);
   res.render("index.ejs",{Movies:movies,scoreList:scoreArray});
 })
@@ -157,7 +157,7 @@ app.post("/result",async (req,res)=>{
   }
 
 
-   console.log(score);
+   //console.log(score);
    res.redirect("/");
 })
 
@@ -187,10 +187,14 @@ app.post("/edit",async(req,res)=>{
        }catch(err){console.log(err); }
     }
 
-  console.log(movies);
+  //console.log(movies);
    res.redirect("/");
 })
 
+app.post("/home",(req,res)=>{
+  movies = defaultMovieList;
+  res.redirect("/");
+})
 
 
 app.listen(port, () => {
